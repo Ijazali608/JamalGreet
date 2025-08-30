@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compact Surprise Gift Box</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+        }
+        
+        h1 {
+            color: #fff;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            font-size: 1.6rem;
+        }
+        
+        .gift-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .gift-box {
+            width: 160px;
+            height: 130px;
+            margin: 0 auto;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .gift-box:hover {
+            transform: scale(1.05);
+        }
+        
+        .box {
+            position: absolute;
+            width: 100%;
+            height: 80%;
+            bottom: 0;
+            background: linear-gradient(45deg, #ff4e50 0%, #f9d423 100%);
+            border-radius: 8px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+        
+        .lid {
+            position: absolute;
+            width: 110%;
+            height: 30%;
+            left: -5%;
+            top: 0;
+            background: linear-gradient(45deg, #ff7e5f 0%, #feb47b 100%);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+            transform-origin: center bottom;
+            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+        
+        .ribbon {
+            position: absolute;
+            width: 35px;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            left: calc(50% - 17.5px);
+            z-index: 3;
+        }
+        
+        .ribbon::before {
+            content: '';
+            position: absolute;
+            width: 35px;
+            height: 35px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            top: -17.5px;
+            left: 0;
+        }
+        
+        .ribbon::after {
+            content: '';
+            position: absolute;
+            width: 35px;
+            height: 35px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            bottom: -17.5px;
+            left: 0;
+        }
+        
+        .surprise-container {
+            position: relative;
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        .surprise {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .surprise.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .score-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 0;
+        }
+        
+        .score {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #ff4e50;
+            text-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .score-out-of {
+            font-size: 1.2rem;
+            color: #2575fc;
+            margin-left: 5px;
+        }
+        
+        .message {
+            color: #333;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            margin: 10px 0;
+            text-align: center;
+        }
+        
+        .wish {
+            color: #6a11cb;
+            font-style: italic;
+            font-size: 1rem;
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(106, 17, 203, 0.1);
+            border-radius: 8px;
+            text-align: center;
+            line-height: 1.4;
+        }
+        
+        .lid.open {
+            transform: rotate(-110deg);
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        @keyframes confettiFall {
+            0% {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(720deg);
+            }
+        }
+        
+        .instructions {
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 15px;
+            font-size: 1rem;
+        }
+        
+        .icon {
+            margin-right: 5px;
+            color: #f9d423;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #FF416C, #FF4B2B);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            margin-top: 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        /* Mobile-specific adjustments */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.4rem;
+                margin-bottom: 15px;
+            }
+            
+            .gift-box {
+                width: 140px;
+                height: 115px;
+            }
+            
+            .score {
+                font-size: 1.8rem;
+            }
+            
+            .surprise {
+                padding: 15px;
+            }
+            
+            .message {
+                font-size: 0.9rem;
+            }
+            
+            .wish {
+                font-size: 0.9rem;
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-gift icon"></i>Your Surprise Awaits!<i class="fas fa-gift icon"></i></h1>
+        
+        <div class="gift-wrapper">
+            <div class="gift-box" id="giftBox">
+                <div class="box"></div>
+                <div class="lid" id="lid"></div>
+                <div class="ribbon"></div>
+            </div>
+        </div>
+        
+        <div class="surprise-container">
+            <div class="surprise" id="surprise">
+                <h2>Congratulations! <i class="fas fa-trophy" style="color: #ffd700;"></i></h2>
+                <div class="score-container">
+                    <div class="score">1104</div>
+                    <div class="score-out-of">/1200</div>
+                </div>
+                <div class="message">Outstanding achievement! Your hard work has paid off.</div>
+                <div class="wish">"Wishing you continued success on your journey ahead!"</div>
+                <div class="badge">Top Performer</div>
+            </div>
+        </div>
+        
+        <p class="instructions">Click the gift box to reveal your surprise!</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const giftBox = document.getElementById('giftBox');
+            const lid = document.getElementById('lid');
+            const surprise = document.getElementById('surprise');
+            
+            let opened = false;
+            
+            giftBox.addEventListener('click', function() {
+                if (opened) return;
+                
+                opened = true;
+                
+                // Open the lid
+                lid.classList.add('open');
+                
+                // Show the surprise after a short delay
+                setTimeout(function() {
+                    surprise.classList.add('show');
+                    
+                    // Create confetti
+                    createConfetti();
+                }, 600);
+            });
+            
+            function createConfetti() {
+                const colors = ['#ff4e50', '#f9d423', '#6a11cb', '#2575fc', '#4facfe', '#00f2fe'];
+                
+                for (let i = 0; i < 80; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    
+                    // Random properties
+                    const size = Math.floor(Math.random() * 8) + 4;
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    const left = Math.random() * 100;
+                    const animationDelay = Math.random() * 1.5;
+                    const animationDuration = Math.random() * 2 + 2;
+                    
+                    // Apply styles
+                    confetti.style.width = `${size}px`;
+                    confetti.style.height = `${size}px`;
+                    confetti.style.backgroundColor = color;
+                    confetti.style.left = `${left}vw`;
+                    confetti.style.top = '-50px';
+                    confetti.style.animation = `confettiFall ${animationDuration}s linear ${animationDelay}s forwards`;
+                    confetti.style.borderRadius = '50%';
+                    
+                    // Add to container
+                    document.body.appendChild(confetti);
+                    
+                    // Remove after animation
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, (animationDelay + animationDuration) * 1000);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
